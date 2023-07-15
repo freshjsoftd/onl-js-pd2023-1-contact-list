@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './ContactForm.css';
 
 export class ContactForm extends Component {
-
 	// constructor(props) {
 	// 	super(props);
 	// 	this.state = {
@@ -10,9 +9,18 @@ export class ContactForm extends Component {
 	// 	};
 	// }
 
-  state = {
-    		...this.props.contactForEdit,
-    	};
+	state = {
+		...this.props.contactForEdit,
+	};
+
+	/* static getDerivedStateFromProps(props, state) {
+		if (state.id === props.contactForEdit.id){
+			return {};
+		}
+			return {
+				...props.contactForEdit,
+			};
+	} */
 
 	createEmptyContact() {
 		return {
@@ -24,26 +32,24 @@ export class ContactForm extends Component {
 	}
 
 	onInputChange = (e) => {
+		const { name, value } = e.target;
 		this.setState({
-			[e.target.name]: e.target.value,
+			[name]: value,
 		});
 	};
 
-  onClearField = (e) => {
-    const sibling = e.target.parentNode.firstChild;
-    this.setState({
-      [sibling.name]: '',
-    })
-  }
+	onClearField = (e) => {
+		const sibling = e.target.parentNode.firstChild;
+		this.setState({
+			[sibling.name]: '',
+		});
+	};
 
 	onFormSubmit = (e) => {
 		e.preventDefault();
 		this.props.onSubmit({
 			...this.state,
 		});
-		/* this.setState({
-			...this.createEmptyContact(),
-		}); */
 	};
 
 	onContactDelete = () => {
@@ -66,7 +72,9 @@ export class ContactForm extends Component {
 							value={this.state.firstName}
 							onChange={this.onInputChange}
 						/>
-						<span className='clear' onClick={this.onClearField}>X</span>
+						<span className='clear' onClick={this.onClearField}>
+							X
+						</span>
 					</div>
 					<div className='contact-info'>
 						<input
@@ -77,18 +85,22 @@ export class ContactForm extends Component {
 							value={this.state.lastName}
 							onChange={this.onInputChange}
 						/>
-						<span className='clear' onClick={this.onClearField}>X</span>
+						<span className='clear' onClick={this.onClearField}>
+							X
+						</span>
 					</div>
 					<div className='contact-info'>
 						<input
-							type='text'
+							type='email'
 							className='text-field'
 							name='email'
 							placeholder='Email'
 							value={this.state.email}
 							onChange={this.onInputChange}
 						/>
-						<span className='clear' onClick={this.onClearField}>X</span>
+						<span className='clear' onClick={this.onClearField}>
+							X
+						</span>
 					</div>
 					<div className='contact-info'>
 						<input
@@ -99,7 +111,9 @@ export class ContactForm extends Component {
 							value={this.state.phone}
 							onChange={this.onInputChange}
 						/>
-						<span className='clear' onClick={this.onClearField}>X</span>
+						<span className='clear' onClick={this.onClearField}>
+							X
+						</span>
 					</div>
 				</div>
 				<div className='btns'>
@@ -110,7 +124,8 @@ export class ContactForm extends Component {
 						<button
 							id='delete'
 							type='button'
-							onClick={this.onContactDelete}>
+							onClick={this.onContactDelete}
+						>
 							Delete
 						</button>
 					) : (

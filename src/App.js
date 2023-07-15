@@ -11,6 +11,7 @@ export class App extends Component {
 
 	createEmptyContact() {
 		return {
+			id: '',
 			firstName: '',
 			lastName: '',
 			email: '',
@@ -18,30 +19,24 @@ export class App extends Component {
 		};
 	}
 
+	saveState(contacts) {
+		localStorage.setItem('contacts', JSON.stringify(contacts));
+	}
+
+	restoreState(){
+		const data = localStorage.getItem('contacts');
+		return data ? JSON.parse(data) : [];
+	}
+
 	componentDidMount() {
-		const contacts = JSON.parse(localStorage.getItem('contacts'));
-		if (!contacts) {
-			this.setState({
-				contacts: [],
-			});
-		} else {
-			this.setState({
-				contacts: [...contacts],
-			});
-		}
-	}
-
-	componentDidUpdate() {
-		localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-	}
-
-	deleteContact = (id) => {
 		this.setState({
-			contacts: [
-				...this.state.contacts.filter((contact) => contact.id !== id),
-			],
+			contacts: this.restoreState(),
 		});
-	};
+	}
+
+	/* componentDidUpdate() {
+		localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+	} */
 
 	saveContact = (contact) => {
 		if (!contact.id) {
@@ -62,12 +57,27 @@ export class App extends Component {
 			contactForEdit: contact,
 		});
 	};
+	deleteContact = (id) =>{
+		this.setState((state) => {
+			const contacts = state.contacts.filter((contact) => contact.id !== id);
+			
+			this.saveState(contacts);
+			return {
+				contacts,
+				contactForEdit: [],
+			}
+		});
+	}
 
 	createContact(contact) {
 		contact.id = Date.now();
-		this.setState({
-			contacts: [...this.state.contacts, contact],
-			contactForEdit: this.createEmptyContact(),
+		this.setState((state) => {
+			const contacts = [...state.contacts, contact];
+			this.saveState(contacts);
+			return {
+				contacts,
+				contactForEdit: this.createEmptyContact(),
+			};
 		});
 	}
 	updateContact(contact) {
@@ -75,6 +85,7 @@ export class App extends Component {
 			const contacts = state.contacts.map((item) =>
 				item.id === contact.id ? contact : item
 			);
+			this.saveState(contacts);
 			return {
 				contacts,
 				contactForEdit: contact,
