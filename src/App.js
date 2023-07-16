@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import './App.css';
+import { CircleLoader} from 'react-spinners';
 import ContactForm from './components/ContactForm/ContactForm';
 import ContactList from './components/ContactList/ContactList';
+import './App.css';
+import Wrapper from './components/Wrapper/Wrapper';
 
 export class App extends Component {
 	state = {
 		contacts: [],
-		contactForEdit: this.createEmptyContact(),
+		contactForEdit: null,
 	};
 
 	createEmptyContact() {
@@ -101,6 +103,17 @@ export class App extends Component {
 		});
 	}
 
+	/* renderList = () => {
+		return (
+			<ContactList
+				contacts={this.state.contacts}
+				onDelete={this.deleteContact}
+				onAddContact={this.addNewContact}
+				onEditContact={this.selectContact}
+			/>
+		);
+	} */
+
 	render() {
 		// console.log(this.state.contactForEdit);
 		// console.log(this.state.contacts);
@@ -108,19 +121,29 @@ export class App extends Component {
 			<div className='container'>
 				<h1 className='header'>Contact List</h1>
 				<div className='main'>
-					<ContactList
-						contacts={this.state.contacts}
-						onDelete={this.deleteContact}
-						onAddContact={this.addNewContact}
-						onEditContact={this.selectContact}
-					/>
-					<ContactForm
-						// key={this.state.contactForEdit.id}
-						contactForEdit={this.state.contactForEdit}
-						onSubmit={this.saveContact}
-						onDelete={this.deleteContact}
-						onChange={this.changeForm}
-					/>
+					{/* <Wrapper getContent={this.renderList}/> */}
+					<Wrapper>
+						<ContactList
+							contacts={this.state.contacts}
+							onDelete={this.deleteContact}
+							onAddContact={this.addNewContact}
+							onEditContact={this.selectContact}
+						/>
+					</Wrapper>
+					<Wrapper>
+						{this.state.contactForEdit ? (
+						<ContactForm
+							// key={this.state.contactForEdit.id}
+							contactForEdit={this.state.contactForEdit}
+							onSubmit={this.saveContact}
+							onDelete={this.deleteContact}
+							onChange={this.changeForm}
+						/>
+					) : (
+						<CircleLoader color='#36d7b7' size={200} />
+					)}
+					</Wrapper>
+					
 				</div>
 			</div>
 		);
