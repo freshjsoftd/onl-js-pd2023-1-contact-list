@@ -19,6 +19,14 @@ export class App extends Component {
 		};
 	}
 
+	changeForm = (changes) => {
+		this.setState({
+			contactForEdit: {
+				...this.state.contactForEdit,
+				...changes,
+			}
+		})
+	}
 	saveState(contacts) {
 		localStorage.setItem('contacts', JSON.stringify(contacts));
 	}
@@ -64,8 +72,8 @@ export class App extends Component {
 			this.saveState(contacts);
 			return {
 				contacts,
-				contactForEdit: [],
-			}
+				contactForEdit: this.createEmptyContact(),
+			};
 		});
 	}
 
@@ -107,10 +115,11 @@ export class App extends Component {
 						onEditContact={this.selectContact}
 					/>
 					<ContactForm
-						key={this.state.contactForEdit.id}
+						// key={this.state.contactForEdit.id}
 						contactForEdit={this.state.contactForEdit}
 						onSubmit={this.saveContact}
 						onDelete={this.deleteContact}
+						onChange={this.changeForm}
 					/>
 				</div>
 			</div>

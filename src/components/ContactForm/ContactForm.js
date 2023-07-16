@@ -2,61 +2,27 @@ import React, { Component } from 'react';
 import './ContactForm.css';
 
 export class ContactForm extends Component {
-	// constructor(props) {
-	// 	super(props);
-	// 	this.state = {
-	// 		...props.contactForEdit,
-	// 	};
-	// }
-
-	state = {
-		...this.props.contactForEdit,
-	};
-
-	/* static getDerivedStateFromProps(props, state) {
-		if (state.id === props.contactForEdit.id){
-			return {};
-		}
-			return {
-				...props.contactForEdit,
-			};
-	} */
-
-	createEmptyContact() {
-		return {
-			firstName: '',
-			lastName: '',
-			email: '',
-			phone: '',
-		};
-	}
-
 	onInputChange = (e) => {
 		const { name, value } = e.target;
-		this.setState({
+		this.props.onChange({
 			[name]: value,
 		});
 	};
 
 	onClearField = (e) => {
 		const sibling = e.target.parentNode.firstChild;
-		this.setState({
-			[sibling.name]: '',
-		});
+		sibling.value = '';
 	};
 
 	onFormSubmit = (e) => {
 		e.preventDefault();
 		this.props.onSubmit({
-			...this.state,
+			...this.props.contactForEdit,
 		});
 	};
 
 	onContactDelete = () => {
 		this.props.onDelete(this.props.contactForEdit.id);
-		this.setState({
-			...this.createEmptyContact(),
-		});
 	};
 
 	render() {
@@ -69,7 +35,7 @@ export class ContactForm extends Component {
 							className='text-field'
 							placeholder='First name'
 							name='firstName'
-							value={this.state.firstName}
+							value={this.props.contactForEdit.firstName}
 							onChange={this.onInputChange}
 						/>
 						<span className='clear' onClick={this.onClearField}>
@@ -82,7 +48,7 @@ export class ContactForm extends Component {
 							className='text-field'
 							name='lastName'
 							placeholder='Last name'
-							value={this.state.lastName}
+							value={this.props.contactForEdit.lastName}
 							onChange={this.onInputChange}
 						/>
 						<span className='clear' onClick={this.onClearField}>
@@ -95,7 +61,7 @@ export class ContactForm extends Component {
 							className='text-field'
 							name='email'
 							placeholder='Email'
-							value={this.state.email}
+							value={this.props.contactForEdit.email}
 							onChange={this.onInputChange}
 						/>
 						<span className='clear' onClick={this.onClearField}>
@@ -108,7 +74,7 @@ export class ContactForm extends Component {
 							className='text-field'
 							name='phone'
 							placeholder='Phone'
-							value={this.state.phone}
+							value={this.props.contactForEdit.phone}
 							onChange={this.onInputChange}
 						/>
 						<span className='clear' onClick={this.onClearField}>
@@ -120,7 +86,7 @@ export class ContactForm extends Component {
 					<button id='save' type='submit'>
 						Save
 					</button>
-					{this.state.id ? (
+					{this.props.contactForEdit.id ? (
 						<button
 							id='delete'
 							type='button'
